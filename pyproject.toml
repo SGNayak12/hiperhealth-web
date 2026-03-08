@@ -1,0 +1,167 @@
+[project]
+name = "hiperhealth-web"
+version = "0.0.1"  # semantic-release
+description = "Provide a pipeline for medical encounter empowered by AI"
+readme = "README.md"
+authors = [
+  {name = "Ivan Ogasawara", email = "ivan.ogasawara@gmail.com"}
+]
+license = { text = "BSD 3 Clause" }
+requires-python = ">=3.10,<4"
+dependencies = [
+    "hiperhealth >=0.0.1",
+    "fastapi >=0.115",
+    "jinja2 >=3.1.2",
+    "pydantic >=2,<3",
+    "python-multipart >=0.0.20",
+    "questionary >=2.1.0",
+    "rich >=13",
+    "sqlalchemy >=2.0.41",
+    "typer >=0.12",
+    "uvicorn (>=0.38.0,<0.39.0)",
+]
+
+[project.urls]
+Homepage = "https://github.com/hiperhealth/hiperhealth"
+Issues = "https://github.com/hiperhealth/hiperhealth/issues"
+
+[build-system]
+requires = ["setuptools>=70.1.0,<80.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+hiperhealth = ["py.typed"]
+
+[project.optional-dependencies]
+dev = [
+  "pytest >=7.3.2",
+  "pytest-cov >=4.1.0",
+  "coverage >=7.2.7",
+  "pre-commit >=3.3.2",
+  "ruff >=0.2.0",
+  "mypy >=1.5.0",
+  "bandit >=1.7.5",
+  "vulture >=2.7",
+  "ipython >=8",
+  "ipykernel >=6.0.0",
+  "mkdocs >=1.4.3",
+  "mkdocs-exclude >=1.0.2",
+  "mkdocs-jupyter >=0.24.1",
+  "mkdocs-literate-nav >=0.6.0",
+  "mkdocs-macros-plugin >=0.7.0,<1",
+  "mkdocs-material >=9.1.15",
+  "mkdocstrings >=0.21.2",
+  "mkdocstrings-python >= 1.1.2",
+  "mkdocs-gen-files >=0.5.0",
+  "makim ==1.27.0",
+]
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+targets = "./"
+
+[tool.mypy]
+python_version = "3.10"
+allow_subclassing_any = true
+check_untyped_defs = true
+strict = true
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+exclude = ["scripts/"]
+plugins = [
+  "pydantic.mypy",
+]
+
+[[tool.mypy.overrides]]
+module = "hiperhealth.schema.fhirx"
+disable_error_code = [
+  "name-defined",
+  "valid-type",
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+filterwarnings = [
+    "error::RuntimeWarning",
+    "error::typeguard.TypeHintWarning",
+]
+
+[tool.ruff]
+line-length = 79
+force-exclude = true
+src = ["./"]
+exclude = [
+  'docs',
+]
+
+[tool.ruff.lint]
+select = [
+  "E",   # pycodestyle
+  "F",   # pyflakes
+  "D",   # pydocstyle
+  "YTT", # flake8-2020
+  "RUF", # Ruff-specific rules
+  "I001",  # isort
+]
+fixable = ["I001", "F401"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.isort]
+# Use a single line between direct and from import
+lines-between-types = 1
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.vulture]
+exclude = ["tests"]
+ignore_decorators = []
+ignore_names = []
+make_whitelist = true
+min_confidence = 80
+paths = ["./"]
+sort_by_size = true
+verbose = false
+
+[tool.djlint]
+blank_line_after_tag="load,extends,include"
+blank_line_before_tag="load,extends,include,block"
+close_void_tags=true
+# custom_blocks="toc,example"
+# custom_html="mjml,simple-greeting,mj-\w+"
+format_attribute_template_tags=true
+format_css=true
+indent=2
+line_break_after_multiline_tag=true
+max_attribute_length=3
+max_blank_lines=1
+max_line_length=80
+profile="django"
+# following issue:
+#   - https://github.com/Riverside-Healthcare/djLint/issues/703
+exclude=".git,docs,.eggs"
+# TODO: remove from the ignore list:
+#       H013,H021,H023,D018
+ignore="H026,H029,H005,H030,H031,H006,H013,H021,H023,D018"
+preserve_blank_lines=false
+
+[tool.djlint.html]
+indent_size=2
+
+[tool.djlint.css]
+indent_size=2
+
+[tool.djlint.js]
+indent_size=2
