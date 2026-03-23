@@ -155,10 +155,10 @@ export default function Dashboard() {
     }
   };
 
-  const handleDeletePatient = async (patientId, patientName) => {
+  const handleDeletePatient = async (patientId) => {
     if (
       !window.confirm(
-        `Delete patient "${patientId || patientName}"? This action cannot be undone.`
+        `Delete patient "${patientId}"? This action cannot be undone.`
       )
     ) {
       return;
